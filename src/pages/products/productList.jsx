@@ -40,7 +40,7 @@ export function ProductList() {
     }, [skip, limit]);
 
     return (
-        <div className='min-h-screen py-2 px-4 border-b border-black'>
+        <div className='min-h-screen px-8 py-10 border-b border-black'>
             {isFetching && (
                 <div className='grid place-items-center'>
                     <Spinner svgSize='70px' /> <Text type='subtitle'>Fetching products...</Text>

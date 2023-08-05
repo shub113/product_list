@@ -96,16 +96,21 @@ const Filter = () => {
         <Select
             options={options}
             onChange={(item) => {
-                setCategory(item.value);
+                if (item) {
+                    setCategory(item.value);
+                    return;
+                }
+                setCategory("");
             }}
             isDisabled={isFetching}
+            isClearable={true}
         />
     );
 };
 
 export function Actions() {
     return (
-        <div className='py-4 grid grid-cols-[minmax(100px,_1fr)] grid-rows-3 gap-2 px-4 md:grid-rows-1 md:grid-cols-[minmax(100px,_1fr)_minmax(300px,_6fr)_minmax(200px,_2fr)] border-b bg-white border-black'>
+        <div className='py-3 px-4 md:py-6 grid grid-cols-1 grid-rows-3 gap-2 md:gap-4  md:grid-rows-1 md:grid-cols-[minmax(100px,_1fr)_minmax(300px,_6fr)_minmax(200px,_2fr)] border-b border-black'>
             <Sort />
             <Search />
             <Filter />
