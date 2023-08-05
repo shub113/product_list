@@ -20,7 +20,13 @@ const Sort = () => {
         <div className='w-fit cursor-pointer '>
             {sort === sortValues.default && (
                 <OverlayText text='sort by price (descending)'>
-                    <CgSortAz size={30} onClick={() => setSort(sortValues.descending)} />
+                    <CgSortAz
+                        size={30}
+                        onClick={() => {
+                            toast.success("Currently data are sorted in DESCENDING ORDER");
+                            setSort(sortValues.descending);
+                        }}
+                    />
                 </OverlayText>
             )}
             {sort === sortValues.descending && (
@@ -28,7 +34,11 @@ const Sort = () => {
                     <CgSortZa
                         size={30}
                         className='text-blue-500'
-                        onClick={() => setSort(sortValues.ascending)}
+                        onClick={() => {
+                            toast.success("Currently data are sorted in ASCENDING ORDER");
+
+                            setSort(sortValues.ascending);
+                        }}
                     />
                 </OverlayText>
             )}
@@ -37,7 +47,10 @@ const Sort = () => {
                     <CgSortAz
                         size={30}
                         className='text-blue-500'
-                        onClick={() => setSort(sortValues.default)}
+                        onClick={() => {
+                            toast.success("Currently data are NOT sorted in any order");
+                            setSort(sortValues.default);
+                        }}
                     />
                 </OverlayText>
             )}
@@ -50,10 +63,12 @@ const Search = () => {
 
     const productData = UseProductData();
     const setSearchText = productData?.setSearchText ?? (() => {});
+    const setSkip = productData?.setSkip ?? (() => {});
     const debouncedValue = UseDebounce(input, 400);
 
     useEffect(() => {
         setSearchText(debouncedValue);
+        setSkip(0);
     }, [debouncedValue]);
 
     return (
@@ -71,6 +86,7 @@ const Filter = () => {
 
     const productData = UseProductData();
     const setCategory = productData?.setCategory ?? (() => {});
+    const setSkip = productData?.setSkip ?? (() => {});
 
     const { data, isFetching, isFetched } = useQuery(
         ["get_categories"],
@@ -96,6 +112,7 @@ const Filter = () => {
         <Select
             options={options}
             onChange={(item) => {
+                setSkip(0);
                 if (item) {
                     setCategory(item.value);
                     return;

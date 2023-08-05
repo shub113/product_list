@@ -13,7 +13,6 @@ export function ProductList() {
     const sort = productData?.sort ?? sortValues.default;
     const data = productData?.data ?? {};
     const skip = data?.skip ?? "";
-    const limit = data?.limit ?? "";
 
     const [list, setList] = useState([]);
 
@@ -28,16 +27,11 @@ export function ProductList() {
         if (sort === sortValues.descending) {
             const list = [...productList];
             list.sort((a, b) => b.price - a.price);
-
             setList(list);
             return;
         }
         setList(productList);
-    }, [sort]);
-
-    useEffect(() => {
-        setList(productList);
-    }, [skip, limit]);
+    }, [sort, skip]);
 
     return (
         <div className='min-h-screen px-8 py-10 border-b border-black'>
