@@ -1,25 +1,39 @@
-import { useQuery } from "react-query";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
-import { defaultErrorText } from "../../helper/constant";
-import { api } from "../../modules/axios";
 import { ProductCard } from "./productCard";
 import { Spinner, Text } from "../../components/index";
+import { UseProductData } from "../../hooks/useProductData";
+import { sortValues } from "../../helper/constant";
 
 export function ProductList() {
-    const { data, isFetching, isFetched } = useQuery(
-        ["get_products"],
-        () => api.get("https://dummyjson.com/products?limit=10"),
-        {
-            onError: (error) => {
-                if (error) {
-                    toast.error(error?.message ?? defaultErrorText);
-                }
-            },
-            staleTime: 24 * 60 * 60 * 1000, // 1 day
+    const { productList, isFetching, isFetched, sort, data } = UseProductData();
+    const skip = data?.skip ?? "";
+    const limit = data?.limit ?? "";
+
+    const [list, setList] = useState([]);
+
+    // sorting
+    useEffect(() => {
+        if (sort === sortValues.ascending) {
+            const list = [...productList];
+            list.sort((a, b) => a.price - b.price);
+            setList(list);
+            return;
         }
-    );
-    const productList = data?.data?.products ?? [];
+        if (sort === sortValues.descending) {
+            const list = [...productList];
+            list.sort((a, b) => b.price - a.price);
+
+            setList(list);
+            return;
+        }
+        setList(productList);
+    }, [sort]);
+
+    useEffect(() => {
+        setList(productList);
+    }, [skip, limit]);
+
     return (
         <div className='min-h-screen py-2 px-4 border-b border-black'>
             {isFetching && (
@@ -28,7 +42,7 @@ export function ProductList() {
                 </div>
             )}
             {isFetched &&
-                productList.map((product, index) => (
+                list.map((product, index) => (
                     <ProductCard key={product?.id ?? index} productData={product} />
                 ))}
         </div>
