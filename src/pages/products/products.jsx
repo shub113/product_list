@@ -13,17 +13,17 @@ export const ProductDataContext = createContext(null);
 
 export function Products() {
     const [sort, setSort] = useState(sortValues.default);
+    const [searchText, setSearchText] = useState("");
 
     const { data, isFetching, isFetched } = useQuery(
-        ["get_products"],
-        () => api.get("https://dummyjson.com/products?limit=10"),
+        ["get_products", searchText],
+        () => api.get(`https://dummyjson.com/products?limit=10&search${searchText}`),
         {
             onError: (error) => {
                 if (error) {
                     toast.error(error?.message ?? defaultErrorText);
                 }
             },
-            staleTime: 24 * 60 * 60 * 1000, // 1 day
         }
     );
     const productList = data?.data?.products ?? [];
@@ -31,7 +31,16 @@ export function Products() {
     return (
         <div className='border-2 border-black rounded-lg'>
             <ProductDataContext.Provider
-                value={{ sort, setSort, data: data?.data ?? {}, isFetching, isFetched, productList }}
+                value={{
+                    sort,
+                    setSort,
+                    data: data?.data ?? {},
+                    isFetching,
+                    isFetched,
+                    productList,
+                    searchText,
+                    setSearchText,
+                }}
             >
                 <Header />
                 <Actions />

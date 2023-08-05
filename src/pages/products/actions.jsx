@@ -1,11 +1,16 @@
+import { useEffect, useState } from "react";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
 
-import { OverlayText } from "../../components/index";
+import { OverlayText, Input } from "../../components/index";
 import { sortValues } from "../../helper/constant";
 import { UseProductData } from "../../hooks/useProductData";
+import { UseDebounce } from "../../hooks/useDebounce";
 
 const Sort = () => {
-    const { sort, setSort } = UseProductData();
+    const data = UseProductData();
+    const sort = data?.sort ?? sortValues.default;
+    const setSort = data?.setSort ?? (() => {});
+
     return (
         <div className='w-fit cursor-pointer '>
             {sort === sortValues.default && (
@@ -35,10 +40,25 @@ const Sort = () => {
     );
 };
 
+const Search = () => {
+    const [input, setInput] = useState("");
+
+    const productData = UseProductData();
+    const setSearchText = productData?.setSearchText ?? (() => {});
+    const debouncedValue = UseDebounce(input, 400);
+
+    useEffect(() => {
+        setSearchText(debouncedValue);
+    }, [debouncedValue]);
+
+    return <Input value={input} setValue={(value) => setInput(value)} />;
+};
+
 export function Actions() {
     return (
-        <div className='py-2 px-4 border-b bg-white border-black'>
+        <div className='py-2 px-4 border-b bg-white border-black md:flex md:gap-3'>
             <Sort />
+            <Search />
         </div>
     );
 }

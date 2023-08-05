@@ -6,7 +6,12 @@ import { UseProductData } from "../../hooks/useProductData";
 import { sortValues } from "../../helper/constant";
 
 export function ProductList() {
-    const { productList, isFetching, isFetched, sort, data } = UseProductData();
+    const productData = UseProductData();
+    const productList = productData?.productList ?? [];
+    const isFetching = productData?.isFetching ?? false;
+    const isFetched = productData?.isFetched ?? false;
+    const sort = productData?.sort ?? sortValues.default;
+    const data = productData?.data ?? {};
     const skip = data?.skip ?? "";
     const limit = data?.limit ?? "";
 

@@ -5,3 +5,4 @@ export { Text } from "./text";
 export { Card } from "./card";
 export { Flexbox } from "./flexbox";
 export { OverlayText } from "./overlayText";
+export { Input } from "./input";

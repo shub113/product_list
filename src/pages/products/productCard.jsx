@@ -16,10 +16,10 @@ export function ProductCard({ productData }) {
                 </div>
                 <div className='grid place-items-start mt-3 bg-stone-100 p-3 rounded-lg md:mt-0'>
                     <div className='flex justify-center w-full gap-5 md:block '>
-                        <Flexbox>
-                            <MdDiscount className='text-emerald-500' /> {productData?.price ?? <NA />}
+                        <Flexbox styleFlexbox='gap-1'>
+                            <MdDiscount className='text-emerald-500' /> {productData?.price ?? <NA />}/-
                         </Flexbox>
-                        <Flexbox>
+                        <Flexbox styleFlexbox='gap-1'>
                             <AiFillStar className='text-blue-500' /> {productData?.rating ?? <NA />}
                         </Flexbox>
                     </div>
