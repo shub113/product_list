@@ -1,11 +1,12 @@
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
-import { Flexbox, Text, Button, NA } from "../../components/index";
+import { Flexbox, Text, Button, NA, Spinner } from "../../components/index";
 import { UseProductData } from "../../hooks/useProductData";
 
 export function Footer() {
     const productData = UseProductData();
 
+    const isFetching = productData?.isFetching ?? false;
     const setSkip = productData?.setSkip ?? (() => {});
     const start = productData?.data?.skip + 1 ?? <NA />;
     const total = productData?.data?.total ?? <NA />;
@@ -13,6 +14,14 @@ export function Footer() {
 
     if (end > total) {
         end = total;
+    }
+    console.log(isFetching);
+    if (isFetching) {
+        return (
+            <Flexbox styleFlexbox='py-2 px-4 rounded-lg border-black justify-center md:justify-end gap-3'>
+                <Spinner /> Loading...
+            </Flexbox>
+        );
     }
 
     return (
