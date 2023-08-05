@@ -15,7 +15,7 @@ export function Footer() {
     if (end > total) {
         end = total;
     }
-    console.log(isFetching);
+
     if (isFetching) {
         return (
             <Flexbox styleFlexbox='py-2 px-4 rounded-lg border-black justify-center md:justify-end gap-3'>
