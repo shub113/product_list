@@ -14,10 +14,18 @@ export const ProductDataContext = createContext(null);
 export function Products() {
     const [sort, setSort] = useState(sortValues.default);
     const [searchText, setSearchText] = useState("");
+    const [category, setCategory] = useState("");
 
     const { data, isFetching, isFetched } = useQuery(
-        ["get_products", searchText],
-        () => api.get(`https://dummyjson.com/products?limit=10&search${searchText}`),
+        ["get_products", searchText, category],
+        () => {
+            if (category) {
+                return api.get(
+                    `https://dummyjson.com/products/category/${category}?limit=10&search${searchText}`
+                );
+            }
+            return api.get(`https://dummyjson.com/products?limit=10&search${searchText}`);
+        },
         {
             onError: (error) => {
                 if (error) {
@@ -40,6 +48,7 @@ export function Products() {
                     productList,
                     searchText,
                     setSearchText,
+                    setCategory,
                 }}
             >
                 <Header />

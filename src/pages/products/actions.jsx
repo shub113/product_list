@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { CgSortAz, CgSortZa } from "react-icons/cg";
+import { AiOutlineSearch } from "react-icons/ai";
+import Select from "react-select";
+import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 
 import { OverlayText, Input } from "../../components/index";
 import { sortValues } from "../../helper/constant";
 import { UseProductData } from "../../hooks/useProductData";
 import { UseDebounce } from "../../hooks/useDebounce";
+import { api } from "../../modules/axios";
 
 const Sort = () => {
     const data = UseProductData();
@@ -51,14 +56,59 @@ const Search = () => {
         setSearchText(debouncedValue);
     }, [debouncedValue]);
 
-    return <Input value={input} setValue={(value) => setInput(value)} />;
+    return (
+        <Input
+            value={input}
+            setValue={(value) => setInput(value)}
+            placeholder='Search products'
+            beforeComponent={<AiOutlineSearch size={25} />}
+        />
+    );
+};
+
+const Filter = () => {
+    const [options, setOptions] = useState([]);
+
+    const productData = UseProductData();
+    const setCategory = productData?.setCategory ?? (() => {});
+
+    const { data, isFetching, isFetched } = useQuery(
+        ["get_categories"],
+        () => api.get(`https://dummyjson.com/products/categories`),
+        {
+            onError: (error) => {
+                if (error) {
+                    toast.error(error?.message ?? defaultErrorText);
+                }
+            },
+        }
+    );
+
+    const categories = data?.data ?? [];
+
+    useEffect(() => {
+        if (isFetched) {
+            setOptions(categories.map((item) => ({ value: item, label: item.toUpperCase() })));
+        }
+    }, [isFetched]);
+
+    return (
+        <Select
+            options={options}
+            onChange={(item) => {
+                setCategory(item.value);
+            }}
+            isDisabled={isFetching}
+        />
+    );
 };
 
 export function Actions() {
     return (
-        <div className='py-2 px-4 border-b bg-white border-black md:flex md:gap-3'>
+        <div className='py-4 grid grid-cols-[minmax(100px,_1fr)] grid-rows-3 gap-2 px-4 md:grid-rows-1 md:grid-cols-[minmax(100px,_1fr)_minmax(300px,_6fr)_minmax(200px,_2fr)] border-b bg-white border-black'>
             <Sort />
             <Search />
+            <Filter />
         </div>
     );
 }
