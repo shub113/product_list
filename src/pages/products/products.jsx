@@ -7,6 +7,7 @@ import { api } from "../../modules/axios";
 import { Header } from "./header";
 import { ProductList } from "./productList";
 import { Actions } from "./actions";
+import { Footer } from "./footer";
 import { sortValues } from "../../helper/constant";
 
 export const ProductDataContext = createContext(null);
@@ -14,10 +15,19 @@ export const ProductDataContext = createContext(null);
 export function Products() {
     const [sort, setSort] = useState(sortValues.default);
     const [searchText, setSearchText] = useState("");
+    const [category, setCategory] = useState("");
+    const [skip, setSkip] = useState(0);
 
     const { data, isFetching, isFetched } = useQuery(
-        ["get_products", searchText],
-        () => api.get(`https://dummyjson.com/products?limit=10&search${searchText}`),
+        ["get_products", searchText, category, skip],
+        () => {
+            if (category) {
+                return api.get(
+                    `https://dummyjson.com/products/category/${category}?limit=10&search${searchText}&skip=${skip}`
+                );
+            }
+            return api.get(`https://dummyjson.com/products?limit=10&search${searchText}&skip=${skip}`);
+        },
         {
             onError: (error) => {
                 if (error) {
@@ -29,7 +39,7 @@ export function Products() {
     const productList = data?.data?.products ?? [];
 
     return (
-        <div className='border-2 border-black rounded-lg'>
+        <div className='border-2 border-black rounded-lg bg-white'>
             <ProductDataContext.Provider
                 value={{
                     sort,
@@ -40,11 +50,14 @@ export function Products() {
                     productList,
                     searchText,
                     setSearchText,
+                    setCategory,
+                    setSkip,
                 }}
             >
                 <Header />
                 <Actions />
                 <ProductList />
+                <Footer />
             </ProductDataContext.Provider>
         </div>
     );
