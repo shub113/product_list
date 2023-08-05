@@ -63,18 +63,21 @@ const Search = () => {
 
     const productData = UseProductData();
     const setSearchText = productData?.setSearchText ?? (() => {});
+    const searchText = productData?.searchText ?? "";
     const setSkip = productData?.setSkip ?? (() => {});
-    const category = productData?.category ?? "";
-    const setCategory = productData?.setCategory ?? (() => {});
     const debouncedValue = UseDebounce(input, 400);
+    const category = productData?.category ?? "";
 
     useEffect(() => {
         setSearchText(debouncedValue);
         setSkip(0);
-        if (!category) {
-            setCategory("");
-        }
     }, [debouncedValue]);
+
+    useEffect(() => {
+        if (searchText === "" && input !== "") {
+            setInput("");
+        }
+    }, [searchText]);
 
     return (
         <Input
@@ -82,6 +85,7 @@ const Search = () => {
             setValue={(value) => setInput(value)}
             placeholder='Search products'
             beforeComponent={<AiOutlineSearch size={25} />}
+            disabled={category !== ""}
         />
     );
 };
@@ -120,7 +124,7 @@ const Filter = () => {
             options={options}
             onChange={(item) => {
                 setSkip(0);
-                if (!searchText) {
+                if (searchText) {
                     setSearchText("");
                 }
                 if (item) {
