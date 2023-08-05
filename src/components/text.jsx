@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 function getClassByType(type) {
     switch (type) {
         case "title":
-            return "text-black text-lg font-bold";
+            return "text-black text-lg font-semibold";
         case "subtitle":
             return "text-zinc-500 text-base font-medium";
         default:

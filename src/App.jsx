@@ -8,7 +8,7 @@ import { RouteList } from "./routeList";
 import ErrorBoundry from "./modules/errorBoundry";
 import { Spinner } from "./components/index";
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnMount: false } } });
 
 const PageLoader = (
     <div className='flex h-screen w-screen items-center justify-center'>
