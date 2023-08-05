@@ -1,1 +1,0 @@
-import{j as e,O as s}from"./index-4b720f36.js";function r(){return e.jsx("div",{className:"p-10 bg-slate-100 min-h-screen",children:e.jsx(s,{})})}export{r as PageLayout};
