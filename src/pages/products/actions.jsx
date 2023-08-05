@@ -64,11 +64,16 @@ const Search = () => {
     const productData = UseProductData();
     const setSearchText = productData?.setSearchText ?? (() => {});
     const setSkip = productData?.setSkip ?? (() => {});
+    const category = productData?.category ?? "";
+    const setCategory = productData?.setCategory ?? (() => {});
     const debouncedValue = UseDebounce(input, 400);
 
     useEffect(() => {
         setSearchText(debouncedValue);
         setSkip(0);
+        if (!category) {
+            setCategory("");
+        }
     }, [debouncedValue]);
 
     return (
@@ -87,6 +92,8 @@ const Filter = () => {
     const productData = UseProductData();
     const setCategory = productData?.setCategory ?? (() => {});
     const setSkip = productData?.setSkip ?? (() => {});
+    const setSearchText = productData?.setSearchText ?? (() => {});
+    const searchText = productData?.searchText ?? "";
 
     const { data, isFetching, isFetched } = useQuery(
         ["get_categories"],
@@ -113,6 +120,9 @@ const Filter = () => {
             options={options}
             onChange={(item) => {
                 setSkip(0);
+                if (!searchText) {
+                    setSearchText("");
+                }
                 if (item) {
                     setCategory(item.value);
                     return;

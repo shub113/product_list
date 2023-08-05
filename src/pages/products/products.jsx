@@ -22,11 +22,12 @@ export function Products() {
         ["get_products", searchText, category, skip],
         () => {
             if (category) {
-                return api.get(
-                    `https://dummyjson.com/products/category/${category}?limit=10&search${searchText}&skip=${skip}`
-                );
+                return api.get(`https://dummyjson.com/products/category/${category}?limit=10&skip=${skip}`);
             }
-            return api.get(`https://dummyjson.com/products?limit=10&search${searchText}&skip=${skip}`);
+            if (searchText) {
+                return api.get(`https://dummyjson.com/products/search?q=${searchText}?limit=10&skip=${skip}`);
+            }
+            return api.get(`https://dummyjson.com/products?limit=10&skip=${skip}`);
         },
         {
             onError: (error) => {
@@ -52,6 +53,8 @@ export function Products() {
                     setSearchText,
                     setCategory,
                     setSkip,
+                    category,
+                    skip,
                 }}
             >
                 <Header />
