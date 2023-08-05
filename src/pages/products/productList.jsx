@@ -11,8 +11,8 @@ export function ProductList() {
     const isFetching = productData?.isFetching ?? false;
     const isFetched = productData?.isFetched ?? false;
     const sort = productData?.sort ?? sortValues.default;
-    const data = productData?.data ?? {};
-    const skip = data?.skip ?? "";
+
+    const productListString = JSON.stringify(productList);
 
     const [list, setList] = useState([]);
 
@@ -31,7 +31,15 @@ export function ProductList() {
             return;
         }
         setList(productList);
-    }, [sort, skip]);
+    }, [sort, productListString]);
+
+    if (productList.length === 0) {
+        return (
+            <div className='min-h-screen px-8 py-10 border-b border-black grid place-items-center'>
+                NO DATA AVAILABLE
+            </div>
+        );
+    }
 
     return (
         <div className='min-h-screen px-8 py-10 border-b border-black'>
